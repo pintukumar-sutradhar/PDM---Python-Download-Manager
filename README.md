@@ -15,9 +15,6 @@
 - **Intelligent Probing**: Eliminates "Unknown" sizes by using advanced HTTP range-request probing to force servers to report total content length.
 - **Resume Capability**: Persistent task management via SQLite, supporting full pausing and resuming of active downloads.
 
-<!-- Placeholder for Task Acquisition Screenshot -->
-![Task Acquisition and Scanning](assets/screenshots/acquisition.png)
-
 ### 🎥 Universal Media Extraction
 - **Social Media Support**: Integrated support for **YouTube, Facebook, Instagram, TikTok, and X** via a resilient extraction layer.
 - **Maximum Quality Defaults**: Automatically retrieves the highest available resolution for video and high-bitrate **192kbps MP3** for audio extraction.
@@ -66,4 +63,4 @@ python3 main.py
 ```
 
 ---
-© 2026 PDM Technologies. v1.0.0
+© 2026 PDM - Python Download Manager. v1.0.0
