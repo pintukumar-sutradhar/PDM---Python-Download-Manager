@@ -117,12 +117,7 @@ class NewDownloadDialog(QDialog):
         signin_lbl = QLabel('SITE SIGN-IN')
         signin_lbl.setObjectName('section-title')
         config_v.addWidget(signin_lbl)
-        self.cookie_combo = QComboBox()
-        for lbl, val in [('Not required', ''), ('Firefox', 'firefox'), ('Chrome', 'chrome'), ('Chromium', 'chromium'), ('Brave', 'brave'), ('Edge', 'edge'), ('Opera', 'opera'), ('Vivaldi', 'vivaldi')]:
-            self.cookie_combo.addItem(lbl, val)
-        self.cookie_combo.setToolTip('Site needs login? Pick the browser where you are logged in, then press Scan Media again. Close that browser first.')
-        config_v.addWidget(self.cookie_combo)
-        hint = QLabel('Login-required site? Choose your browser and re-scan. Close the browser while downloading.')
+        hint = QLabel('Login-required site? Press Scan Media - if sign-in is needed, PDM opens the site right here so you can log in once. The session is remembered.')
         hint.setObjectName('section-sub')
         hint.setWordWrap(True)
         config_v.addWidget(hint)
@@ -145,10 +140,7 @@ class NewDownloadDialog(QDialog):
         footer.addWidget(self.ok_btn)
         outer.addLayout(footer)
         try:
-            saved = PDMDatabase().get_setting('cookie_browser', '') or ''
-            c_idx = self.cookie_combo.findData(saved.lower())
-            if c_idx >= 0:
-                self.cookie_combo.setCurrentIndex(c_idx)
+            PDMDatabase().get_setting('cookie_browser', '')
         except Exception:
             pass
 
@@ -157,10 +149,6 @@ class NewDownloadDialog(QDialog):
         if not url:
             QMessageBox.information(self, 'URL Required', 'Paste a media URL to scan first.')
             return
-        try:
-            PDMDatabase().set_setting('cookie_browser', self.cookie_combo.currentData() or '')
-        except Exception:
-            pass
         low = url.lower()
         if low.startswith('magnet:') or low.endswith('.torrent'):
             if low.startswith('magnet:') and 'dn=' in low:

@@ -54,10 +54,6 @@ class PDMSettingsView(QWidget):
             proxy_addr = self.db.get_setting('proxy_address', '')
             self.use_proxy.setChecked(proxy_enabled)
             self.proxy_addr.setText(proxy_addr)
-            cookie_browser = (self.db.get_setting('cookie_browser', '') or '').strip().lower()
-            c_idx = self.cookie_combo.findData(cookie_browser)
-            if c_idx >= 0:
-                self.cookie_combo.setCurrentIndex(c_idx)
         except Exception:
             pass
 
@@ -128,10 +124,7 @@ class PDMSettingsView(QWidget):
         self.use_proxy = QCheckBox('Use Proxy')
         self.proxy_addr = QLineEdit()
         self.proxy_addr.setPlaceholderText('http://127.0.0.1:8080')
-        self.cookie_combo = QComboBox()
-        for lbl, val in [('Disabled', ''), ('Firefox', 'firefox'), ('Chrome', 'chrome'), ('Chromium', 'chromium'), ('Brave', 'brave'), ('Edge', 'edge'), ('Opera', 'opera'), ('Vivaldi', 'vivaldi')]:
-            self.cookie_combo.addItem(lbl, val)
-        container_layout.addWidget(self._create_section('Network', [('Proxy', self.use_proxy, 'Route downloads through an HTTP/SOCKS proxy.'), ('Address', self.proxy_addr, 'Proxy endpoint, e.g. http://127.0.0.1:8080.'), ('Browser Cookies', self.cookie_combo, 'Reuse a logged-in browser profile for sites that require sign-in. Read-only; PDM never stores passwords. Close the browser while downloading.')] ))
+        container_layout.addWidget(self._create_section('Network', [('Proxy', self.use_proxy, 'Route downloads through an HTTP/SOCKS proxy.'), ('Address', self.proxy_addr, 'Proxy endpoint, e.g. http://127.0.0.1:8080.')] ))
         container_layout.addStretch()
         scroll.setWidget(container)
         outer.addWidget(scroll, stretch=1)
@@ -179,7 +172,7 @@ class PDMSettingsView(QWidget):
     def _on_save(self):
         self.save_btn.setEnabled(False)
         self.save_btn.setText('Saving…')
-        data = {'path': self.download_path.text(), 'threads': self.concurrent_limit.currentText(), 'proxy': self.use_proxy.isChecked(), 'proxy_addr': self.proxy_addr.text(), 'theme': self.theme_combo.currentData(), 'container': self.container_combo.currentData(), 'speed_limit': self.speed_limit.currentData(), 'auto_retry': self.retry_combo.currentData(), 'cookie_browser': self.cookie_combo.currentData() or ''}
+        data = {'path': self.download_path.text(), 'threads': self.concurrent_limit.currentText(), 'proxy': self.use_proxy.isChecked(), 'proxy_addr': self.proxy_addr.text(), 'theme': self.theme_combo.currentData(), 'container': self.container_combo.currentData(), 'speed_limit': self.speed_limit.currentData(), 'auto_retry': self.retry_combo.currentData(), 'cookie_browser': ''}
         self.save_clicked.emit(data)
         QTimer.singleShot(500, self._show_confirmation)
 

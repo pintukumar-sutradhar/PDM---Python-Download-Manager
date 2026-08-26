@@ -223,18 +223,18 @@ def _():
     assert hasattr(w, 'clear_all_btn') and hasattr(w, 'empty_trash_btn')
 
 
-@check('ui: settings roundtrip incl cookies + browse btn')
+@check('ui: settings roundtrip incl browse btn')
 def _():
     from PySide6.QtWidgets import QApplication, QPushButton
     from ui.widgets.settings_view import PDMSettingsView
     sv = PDMSettingsView()
     assert any('Browse' in b.text() for b in sv.findChildren(QPushButton))
-    assert sv.cookie_combo.count() >= 7
+    assert not hasattr(sv, 'cookie_combo'), 'external-browser cookie dropdown should be gone (embedded login is the path)'
     data_probe = sv.download_path.text()
     assert data_probe and not data_probe.startswith('~')
 
 
-@check('ui: dialog magnet routing + signin combo')
+@check('ui: dialog magnet routing + embedded sign-in hint')
 def _():
     from PySide6.QtWidgets import QApplication
     from ui.dialogs import NewDownloadDialog
@@ -243,7 +243,7 @@ def _():
     d._start_scan()
     sel = d.get_selected_files()['files'][0]
     assert sel.get('is_torrent') and 'Mutiny' in sel['name']
-    assert d.cookie_combo.count() >= 7
+    assert not hasattr(d, 'cookie_combo'), 'external-browser cookie dropdown should be gone'
 
 
 @check('themes: dark + light apply cleanly')

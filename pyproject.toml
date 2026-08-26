@@ -40,7 +40,6 @@ dependencies = [
 Homepage = "https://github.com/pintukumar-sutradhar/PDM---Python-Download-Manager"
 Repository = "https://github.com/pintukumar-sutradhar/PDM---Python-Download-Manager"
 Issues = "https://github.com/pintukumar-sutradhar/PDM---Python-Download-Manager/issues"
-Changelog = "https://github.com/pintukumar-sutradhar/PDM---Python-Download-Manager/blob/main/CHANGELOG.md"
 
 [project.gui-scripts]
 pdm-manager = "pdm:main"
