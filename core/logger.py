@@ -12,30 +12,20 @@ class PDMLogger:
         return cls._instance
 
     def _setup_logger(self):
-        # Anchor logs to the application directory
         base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        log_dir = os.path.join(base_dir, "logs")
+        log_dir = os.path.join(base_dir, 'logs')
         if not os.path.exists(log_dir):
             os.makedirs(log_dir)
-
         log_file = os.path.join(log_dir, f"pdm_{datetime.now().strftime('%Y%m%d')}.log")
-        
-        self.logger = logging.getLogger("PDM")
+        self.logger = logging.getLogger('PDM')
         self.logger.setLevel(logging.DEBUG)
-
-        # File Handler
         fh = logging.FileHandler(log_file)
         fh.setLevel(logging.DEBUG)
-
-        # Console Handler
         ch = logging.StreamHandler()
-        ch.setLevel(logging.INFO)
-
-        # Formatter
+        ch.setLevel(logging.DEBUG if os.environ.get('PDM_VERBOSE') == '1' else logging.CRITICAL)
         formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         fh.setFormatter(formatter)
         ch.setFormatter(formatter)
-
         self.logger.addHandler(fh)
         self.logger.addHandler(ch)
 
@@ -53,5 +43,4 @@ class PDMLogger:
 
     def critical(self, msg):
         self.logger.critical(msg)
-
 logger = PDMLogger()

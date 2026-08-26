@@ -2,22 +2,36 @@
 __pycache__/
 *.py[cod]
 *$py.class
-.venv
+*.egg-info/
+build/
+dist/
+
+# Virtual environments
+.venv/
 venv/
 ENV/
 
-# Database
+# Application data
 database/*.db
-
-# Logs
+database/inbox/
+database/cookies/
+database/cookies_*.txt
+database/*.db-wal
+database/*.db-shm
 logs/
 *.log
 
-# Build/Dist
-build/
-dist/
-*.spec
+# Test / tooling caches
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
 
 # OS
 .DS_Store
 Thumbs.db
+
+# Editors
+.idea/
+.vscode/
+*.swp

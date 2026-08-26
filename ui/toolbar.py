@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QToolBar, QPushButton, QHBoxLayout, QWidget, QSizePolicy
+from PySide6.QtWidgets import QToolBar, QPushButton, QHBoxLayout, QWidget, QLineEdit
 from PySide6.QtCore import Qt, Signal, QSize
 
 class PDMToolbar(QToolBar):
@@ -6,7 +6,7 @@ class PDMToolbar(QToolBar):
     pause_clicked = Signal()
     resume_clicked = Signal()
     delete_clicked = Signal()
-    clear_clicked = Signal()
+    search_changed = Signal(str)
 
     def __init__(self):
         super().__init__()
@@ -15,37 +15,41 @@ class PDMToolbar(QToolBar):
         self.init_ui()
 
     def init_ui(self):
+        self.setObjectName('toolbar')
         container = QWidget()
         layout = QHBoxLayout(container)
-        layout.setContentsMargins(10, 0, 10, 0)
+        layout.setContentsMargins(18, 8, 18, 8)
         layout.setSpacing(10)
-
-        self.add_btn = QPushButton("+ New Download")
-        self.add_btn.setObjectName("primary-btn")
+        self.add_btn = QPushButton('+  New Download')
+        self.add_btn.setObjectName('primary-btn')
+        self.add_btn.setCursor(Qt.PointingHandCursor)
+        self.add_btn.setToolTip('Start a new download (Ctrl+N)')
         self.add_btn.clicked.connect(self.add_clicked.emit)
-        
-        self.pause_btn = QPushButton("Pause")
-        self.pause_btn.setObjectName("action-btn")
-        self.pause_btn.clicked.connect(self.pause_clicked.emit)
-
-        self.resume_btn = QPushButton("Resume")
-        self.resume_btn.setObjectName("action-btn")
-        self.resume_btn.clicked.connect(self.resume_clicked.emit)
-
-        self.delete_btn = QPushButton("Delete")
-        self.delete_btn.setObjectName("action-btn")
-        self.delete_btn.clicked.connect(self.delete_clicked.emit)
-
-        self.clear_btn = QPushButton("Clear List")
-        self.clear_btn.setObjectName("action-btn")
-        self.clear_btn.setStyleSheet("color: #ff4444;")
-        self.clear_btn.clicked.connect(self.clear_clicked.emit)
-
         layout.addWidget(self.add_btn)
+        self.pause_btn = QPushButton('Pause')
+        self.pause_btn.setObjectName('secondary-btn')
+        self.pause_btn.setCursor(Qt.PointingHandCursor)
+        self.pause_btn.setToolTip('Pause selected download (Ctrl+P)')
+        self.pause_btn.clicked.connect(self.pause_clicked.emit)
         layout.addWidget(self.pause_btn)
+        self.resume_btn = QPushButton('Resume')
+        self.resume_btn.setObjectName('secondary-btn')
+        self.resume_btn.setCursor(Qt.PointingHandCursor)
+        self.resume_btn.setToolTip('Resume selected download (Ctrl+R)')
+        self.resume_btn.clicked.connect(self.resume_clicked.emit)
         layout.addWidget(self.resume_btn)
+        self.delete_btn = QPushButton('Delete')
+        self.delete_btn.setObjectName('secondary-btn')
+        self.delete_btn.setCursor(Qt.PointingHandCursor)
+        self.delete_btn.setToolTip('Move selected download to Trash')
+        self.delete_btn.clicked.connect(self.delete_clicked.emit)
         layout.addWidget(self.delete_btn)
-        layout.addWidget(self.clear_btn)
         layout.addStretch()
-
+        self.search_box = QLineEdit()
+        self.search_box.setObjectName('toolbar-search')
+        self.search_box.setPlaceholderText('Search downloads…')
+        self.search_box.setClearButtonEnabled(True)
+        self.search_box.setMaximumWidth(240)
+        self.search_box.textChanged.connect(self.search_changed.emit)
+        layout.addWidget(self.search_box)
         self.addWidget(container)
